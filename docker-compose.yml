@@ -2,6 +2,7 @@ version: '3.8'
 volumes:
     prometheus_data: {}
     grafana_data: {}
+    vm_data: {}
 networks:
   front-tier:
   back-tier:
@@ -89,4 +90,26 @@ services:
     networks:
       - back-tier
       - front-tier
+    restart: always
+  
+  victoriametrics:
+    image: victoriametrics/victoria-metrics
+    ports:
+      - 8428:8428
+      - 8089:8089
+      - 8089:8089/udp
+      - 2003:2003
+      - 2003:2003/udp
+      - 4242:4242
+    volumes:
+      - vm_data:/storage
+    command:
+      - '-storageDataPath=/storage'
+      - '-graphiteListenAddr=:2003'
+      - '-opentsdbListenAddr=:4242'
+      - '-httpListenAddr=:8428'
+      - '-influxListenAddr=:8089'
+      - '-retentionPeriod=3'
+    networks:
+      - back-tier
     restart: always

@@ -63,3 +63,6 @@ scrape_configs:
 #      - 'tasks.pushgateway'
 #      type: 'A'
 #      port: 9091
+
+remote_write:
+  - url: http://victoriametrics:8428/api/v1/write
