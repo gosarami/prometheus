@@ -1,0 +1,19 @@
+[sources.log_in]
+type = "file"
+ignore_older_secs = 86400
+include = [ "/var/log/**/*.log" ]
+read_from = "beginning"
+
+[sources.log_in_2]
+type = "file"
+ignore_older_secs = 86400
+include = [ "/log/*.log" ]
+read_from = "beginning"
+
+[sinks.log_out]
+type = "loki"
+inputs = [ "log_in", "log_in_2" ]
+endpoint = "http://loki:3100"
+encoding.codec = "json"
+labels.key = "value" # example
+labels.key = "{{ event_field }}" # example
